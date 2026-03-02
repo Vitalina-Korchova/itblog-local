@@ -7,7 +7,7 @@
 - `packages/shared`: спільні типи
 - `supabase`: SQL-схема, індекси та seed
 
-## Швидкий старт
+## Швидкий старт:
 
 Встанови залежності: `npm install`
 Запуск: `npm run dev`

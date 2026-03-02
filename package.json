@@ -1,0 +1,16 @@
+{
+  "name": "it-blog-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev-all.mjs",
+    "build:api": "npm run build --workspace=@it-blog/shared && npm run build --workspace=@it-blog/api",
+    "start:api": "node apps/api/dist/index.js",
+    "build:web": "npm run build --workspace=@it-blog/shared && npm run build --workspace=@it-blog/web",
+    "start:web": "npm run start --workspace=@it-blog/web"
+  }
+}

@@ -1,8 +1,8 @@
-import { ArticlePreview } from "apps/web/types/types.front";
 import { ArticleCard } from "../../../components/article-card";
 import { Pagination } from "../../../components/pagination";
 import { getCategories, getCategoryArticles } from "../../../lib/api";
 import { buildMetadata } from "../../../lib/seo";
+import { ArticlePreview } from "../../../types/types.front";
 
 export async function generateMetadata({
   params,

@@ -3,7 +3,7 @@ import { ArticleViewTracker } from "../../../components/article-view-tracker";
 import { ArticleCard } from "../../../components/article-card";
 import { getArticle, getRelatedArticles } from "../../../lib/api";
 import { buildMetadata } from "../../../lib/seo";
-import { ArticlePreview, Tag } from "apps/web/types/types.front";
+import { ArticlePreview, Tag } from "../../../types/types.front";
 
 export async function generateMetadata({
   params,

@@ -1,6 +1,6 @@
-import { ArticlePreview } from "apps/web/types/types.front";
 import { getArticles } from "../../lib/api";
 import { siteUrl } from "../../lib/env";
+import { ArticlePreview } from "../../types/types.front";
 
 export async function GET() {
   const articles = await getArticles({ pageSize: 20 });

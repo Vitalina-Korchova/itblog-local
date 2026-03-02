@@ -1,5 +1,10 @@
-import type { ArticleDetail, ArticlePreview, PaginatedResponse, Tag } from "@it-blog/shared";
 import { pagination, query } from "../lib/query.js";
+import {
+  ArticleDetail,
+  ArticlePreview,
+  PaginatedResponse,
+  Tag,
+} from "../types/types.back.js";
 
 type RawArticleRow = {
   id: number;
@@ -44,17 +49,17 @@ function normalizeArticle(row: RawArticleRow): ArticlePreview {
           id: row.author_id,
           name: row.author_name ?? "",
           slug: row.author_slug ?? "",
-          avatar_url: row.author_avatar_url
+          avatar_url: row.author_avatar_url,
         }
       : null,
     category: row.category_id
       ? {
           id: row.category_id,
           name: row.category_name ?? "",
-          slug: row.category_slug ?? ""
+          slug: row.category_slug ?? "",
         }
       : null,
-    tags: row.tags ?? []
+    tags: row.tags ?? [],
   };
 }
 
@@ -117,7 +122,9 @@ export async function listPublishedArticles(params: {
 
   if (params.search) {
     values.push(`%${params.search}%`);
-    filters.push(`(a.title ILIKE $${values.length} OR a.content ILIKE $${values.length})`);
+    filters.push(
+      `(a.title ILIKE $${values.length} OR a.content ILIKE $${values.length})`
+    );
   }
 
   if (params.author) {
@@ -132,8 +139,7 @@ export async function listPublishedArticles(params: {
     WHERE ${filters.join(" AND ")}
     GROUP BY a.id, u.id, c.id
     ORDER BY a.published_at DESC NULLS LAST, a.created_at DESC
-    LIMIT $${values.length - 1} OFFSET $${values.length}`
-    ,
+    LIMIT $${values.length - 1} OFFSET $${values.length}`,
     values
   );
 
@@ -157,8 +163,8 @@ export async function listPublishedArticles(params: {
       page,
       pageSize,
       total,
-      pageCount: Math.ceil(total / pageSize)
-    }
+      pageCount: Math.ceil(total / pageSize),
+    },
   } satisfies PaginatedResponse<ArticlePreview>;
 }
 
@@ -178,7 +184,7 @@ export async function getArticleBySlug(slug: string, includeDraft = false) {
 
   return {
     ...normalizeArticle(row),
-    content: row.content ?? ""
+    content: row.content ?? "",
   } satisfies ArticleDetail;
 }
 

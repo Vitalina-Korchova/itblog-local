@@ -1,9 +1,13 @@
-import type { ArticlePreview } from "@it-blog/shared";
+import { ArticlePreview } from "apps/web/types/types.front";
 import { ArticleCard } from "../../../components/article-card";
 import { getAuthor, getAuthorArticles } from "../../../lib/api";
 import { buildMetadata } from "../../../lib/seo";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const author = await getAuthor(slug);
 
@@ -11,13 +15,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: author.name,
     description: author.bio ?? `Профіль автора ${author.name}`,
     path: `/authors/${slug}`,
-    image: author.avatar_url
+    image: author.avatar_url,
   });
 }
 
-export default async function AuthorPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function AuthorPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
-  const [author, articles] = await Promise.all([getAuthor(slug), getAuthorArticles(slug)]);
+  const [author, articles] = await Promise.all([
+    getAuthor(slug),
+    getAuthorArticles(slug),
+  ]);
 
   return (
     <section className="stack">

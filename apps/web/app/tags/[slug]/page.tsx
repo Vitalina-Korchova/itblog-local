@@ -1,9 +1,13 @@
-import type { ArticlePreview } from "@it-blog/shared";
+import { ArticlePreview } from "apps/web/types/types.front";
 import { ArticleCard } from "../../../components/article-card";
 import { getTagArticles, getTags } from "../../../lib/api";
 import { buildMetadata } from "../../../lib/seo";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const tags = await getTags();
   const tag = tags.find((item) => item.slug === slug);
@@ -11,11 +15,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return buildMetadata({
     title: `#${tag?.name ?? slug}`,
     description: `Статті за тегом ${tag?.name ?? slug}`,
-    path: `/tags/${slug}`
+    path: `/tags/${slug}`,
   });
 }
 
-export default async function TagPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function TagPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const articles = await getTagArticles(slug);
 

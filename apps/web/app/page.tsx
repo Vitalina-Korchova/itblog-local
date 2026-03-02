@@ -1,19 +1,20 @@
-import type { ArticlePreview } from "@it-blog/shared";
 import { ArticleCard } from "../components/article-card";
 import { CategoryFilter } from "../components/category-filter";
 import { Pagination } from "../components/pagination";
 import { getArticles, getCategories } from "../lib/api";
 import { buildMetadata } from "../lib/seo";
+import { ArticlePreview } from "../types/types.front";
 
 export const revalidate = 120;
 export const metadata = buildMetadata({
   title: "IT Blog",
-  description: "Останні новини зі світу frontend, backend, AI, DevOps та кібербезпеки.",
-  path: "/"
+  description:
+    "Останні новини зі світу frontend, backend, AI, DevOps та кібербезпеки.",
+  path: "/",
 });
 
 export default async function HomePage({
-  searchParams
+  searchParams,
 }: {
   searchParams: Promise<{ category?: string; page?: string }>;
 }) {
@@ -23,8 +24,8 @@ export default async function HomePage({
     getCategories(),
     getArticles({
       category: resolvedSearchParams.category,
-      page
-    })
+      page,
+    }),
   ]);
 
   return (
@@ -42,7 +43,11 @@ export default async function HomePage({
       <Pagination
         page={articles.meta.page}
         pageCount={articles.meta.pageCount}
-        basePath={resolvedSearchParams.category ? `/?category=${resolvedSearchParams.category}&page=` : "/?page="}
+        basePath={
+          resolvedSearchParams.category
+            ? `/?category=${resolvedSearchParams.category}&page=`
+            : "/?page="
+        }
       />
     </>
   );

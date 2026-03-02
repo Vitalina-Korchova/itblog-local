@@ -1,10 +1,14 @@
-import type { ArticlePreview } from "@it-blog/shared";
+import { ArticlePreview } from "apps/web/types/types.front";
 import { ArticleCard } from "../../../components/article-card";
 import { Pagination } from "../../../components/pagination";
 import { getCategories, getCategoryArticles } from "../../../lib/api";
 import { buildMetadata } from "../../../lib/seo";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const categories = await getCategories();
   const category = categories.find((item) => item.slug === slug);
@@ -12,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return buildMetadata({
     title: category?.name ?? "Категорія",
     description: category?.description ?? `Статті категорії ${slug}`,
-    path: `/categories/${slug}`
+    path: `/categories/${slug}`,
   });
 }
 
@@ -20,7 +24,7 @@ export const revalidate = 120;
 
 export default async function CategoryPage({
   params,
-  searchParams
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ page?: string }>;
@@ -41,7 +45,11 @@ export default async function CategoryPage({
       {categoryArticles.data.map((article: ArticlePreview) => (
         <ArticleCard key={article.id} article={article} />
       ))}
-      <Pagination page={categoryArticles.meta.page} pageCount={categoryArticles.meta.pageCount} basePath={`/categories/${slug}?page=`} />
+      <Pagination
+        page={categoryArticles.meta.page}
+        pageCount={categoryArticles.meta.pageCount}
+        basePath={`/categories/${slug}?page=`}
+      />
     </section>
   );
 }

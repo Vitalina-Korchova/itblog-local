@@ -1,7 +1,7 @@
 "use client";
 
-import type { Category } from "@it-blog/shared";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Category } from "../types/types.front";
 
 export function CategoryFilter({ categories }: { categories: Category[] }) {
   const router = useRouter();
@@ -19,7 +19,9 @@ export function CategoryFilter({ categories }: { categories: Category[] }) {
       {categories.map((category) => (
         <button
           key={category.id}
-          className={params.get("category") === category.slug ? "active-chip" : "chip"}
+          className={
+            params.get("category") === category.slug ? "active-chip" : "chip"
+          }
           onClick={() => router.push(`/?category=${category.slug}`)}
           type="button"
         >
@@ -29,4 +31,3 @@ export function CategoryFilter({ categories }: { categories: Category[] }) {
     </div>
   );
 }
-

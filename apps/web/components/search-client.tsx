@@ -1,10 +1,10 @@
 "use client";
 
-import type { ArticlePreview } from "@it-blog/shared";
 import type { FormEvent } from "react";
 import { useEffect, useState, useTransition } from "react";
 import { searchArticles } from "../lib/api";
 import { ArticleCard } from "./article-card";
+import { ArticlePreview } from "../types/types.front";
 
 export function SearchClient({ initialQuery }: { initialQuery: string }) {
   const [query, setQuery] = useState(initialQuery);
@@ -33,7 +33,11 @@ export function SearchClient({ initialQuery }: { initialQuery: string }) {
   return (
     <section>
       <form className="search-form" onSubmit={onSubmit}>
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Шукати по статтях" />
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Шукати по статтях"
+        />
         <button type="submit">Знайти</button>
       </form>
       {isPending ? <p>Пошук...</p> : null}

@@ -1,12 +1,16 @@
-import type { ArticlePreview, Tag } from "@it-blog/shared";
 import Link from "next/link";
+import { ArticlePreview, Tag } from "../types/types.front";
 
 export function ArticleCard({ article }: { article: ArticlePreview }) {
   return (
     <article className="card">
       <div className="card-meta">
         <span>{article.category?.name ?? "Без категорії"}</span>
-        <span>{article.published_at ? new Date(article.published_at).toLocaleDateString("uk-UA") : "Чернетка"}</span>
+        <span>
+          {article.published_at
+            ? new Date(article.published_at).toLocaleDateString("uk-UA")
+            : "Чернетка"}
+        </span>
       </div>
       <h2>
         <Link href={`/articles/${article.slug}`}>{article.title}</Link>

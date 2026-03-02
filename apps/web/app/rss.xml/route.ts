@@ -1,4 +1,4 @@
-import type { ArticlePreview } from "@it-blog/shared";
+import { ArticlePreview } from "apps/web/types/types.front";
 import { getArticles } from "../../lib/api";
 import { siteUrl } from "../../lib/env";
 
@@ -26,7 +26,7 @@ export async function GET() {
 
   return new Response(xml, {
     headers: {
-      "Content-Type": "application/xml; charset=utf-8"
-    }
+      "Content-Type": "application/xml; charset=utf-8",
+    },
   });
 }

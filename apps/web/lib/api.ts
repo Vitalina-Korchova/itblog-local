@@ -1,4 +1,11 @@
-import type { ArticleDetail, ArticlePreview, Category, PaginatedResponse, Tag, User } from "@it-blog/shared";
+import {
+  ArticleDetail,
+  ArticlePreview,
+  Category,
+  PaginatedResponse,
+  Tag,
+  User,
+} from "../types/types.front";
 import { apiUrl } from "./env";
 
 type NextRequestInit = RequestInit & {
@@ -13,8 +20,8 @@ async function request<T>(path: string, init?: NextRequestInit): Promise<T> {
     next: init?.method === "GET" ? { revalidate: 120 } : undefined,
     headers: {
       "Content-Type": "application/json",
-      ...(init?.headers ?? {})
-    }
+      ...(init?.headers ?? {}),
+    },
   });
 
   if (!response.ok) {
@@ -28,7 +35,11 @@ async function request<T>(path: string, init?: NextRequestInit): Promise<T> {
   return response.json();
 }
 
-async function requestOrFallback<T>(path: string, fallback: T, init?: NextRequestInit): Promise<T> {
+async function requestOrFallback<T>(
+  path: string,
+  fallback: T,
+  init?: NextRequestInit
+): Promise<T> {
   try {
     return await request<T>(path, init);
   } catch {
@@ -42,11 +53,13 @@ const emptyPagination = {
     page: 1,
     pageSize: 10,
     total: 0,
-    pageCount: 0
-  }
+    pageCount: 0,
+  },
 } satisfies PaginatedResponse<ArticlePreview>;
 
-export function getArticles(searchParams?: Record<string, string | number | undefined>) {
+export function getArticles(
+  searchParams?: Record<string, string | number | undefined>
+) {
   const params = new URLSearchParams();
   Object.entries(searchParams ?? {}).forEach(([key, value]) => {
     if (value !== undefined && value !== "") {
@@ -55,7 +68,10 @@ export function getArticles(searchParams?: Record<string, string | number | unde
   });
 
   const suffix = params.toString() ? `?${params.toString()}` : "";
-  return requestOrFallback<PaginatedResponse<ArticlePreview>>(`/articles${suffix}`, emptyPagination);
+  return requestOrFallback<PaginatedResponse<ArticlePreview>>(
+    `/articles${suffix}`,
+    emptyPagination
+  );
 }
 
 export function getArticle(slug: string) {
@@ -86,7 +102,10 @@ export function getTags() {
 }
 
 export function getTagArticles(slug: string, page = 1) {
-  return requestOrFallback<PaginatedResponse<ArticlePreview>>(`/tags/${slug}/articles?page=${page}`, emptyPagination);
+  return requestOrFallback<PaginatedResponse<ArticlePreview>>(
+    `/tags/${slug}/articles?page=${page}`,
+    emptyPagination
+  );
 }
 
 export function getAuthor(slug: string) {
@@ -94,22 +113,34 @@ export function getAuthor(slug: string) {
 }
 
 export function getAuthorArticles(slug: string, page = 1) {
-  return request<PaginatedResponse<ArticlePreview>>(`/authors/${slug}/articles?page=${page}`);
+  return request<PaginatedResponse<ArticlePreview>>(
+    `/authors/${slug}/articles?page=${page}`
+  );
 }
 
 export function searchArticles(query: string, page = 1) {
-  return requestOrFallback<PaginatedResponse<ArticlePreview>>(`/search?q=${encodeURIComponent(query)}&page=${page}`, emptyPagination, {
-    cache: "no-store"
-  });
+  return requestOrFallback<PaginatedResponse<ArticlePreview>>(
+    `/search?q=${encodeURIComponent(query)}&page=${page}`,
+    emptyPagination,
+    {
+      cache: "no-store",
+    }
+  );
 }
 
-export function adminRequest<T>(path: string, token: string, init?: RequestInit) {
+export function adminRequest<T>(
+  path: string,
+  token: string,
+  init?: RequestInit
+) {
   return request<T>(path, {
     ...init,
     headers: {
       Authorization: `Bearer ${token}`,
-      ...(init?.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
-      ...(init?.headers ?? {})
-    }
+      ...(init?.body instanceof FormData
+        ? {}
+        : { "Content-Type": "application/json" }),
+      ...(init?.headers ?? {}),
+    },
   });
 }

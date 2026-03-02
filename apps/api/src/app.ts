@@ -7,7 +7,12 @@ import { errorHandler } from "./middleware/error-handler.js";
 
 export const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://itblogweb-production.up.railway.app",
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -19,4 +24,3 @@ app.use("/api", publicRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/admin", adminRouter);
 app.use(errorHandler);
-

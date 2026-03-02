@@ -1,3 +1,4 @@
+"use client";
 import { ArticleCard } from "../components/article-card";
 import { CategoryFilter } from "../components/category-filter";
 import { Pagination } from "../components/pagination";

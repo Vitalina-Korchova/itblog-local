@@ -9,7 +9,7 @@ export const app = express();
 
 app.use(
   cors({
-    origin: "https://mynewsitseoblog.pp.ua/",
+    origin: "https://mynewsitseoblog.pp.ua",
     credentials: true,
   })
 );

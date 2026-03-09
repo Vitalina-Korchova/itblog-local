@@ -171,6 +171,128 @@ button {
   color: #2e2923;
 }
 
+.author-hero,
+.author-signature {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.author-signature {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(255, 248, 235, 0.72) 100%
+  );
+  box-shadow: 0 12px 32px rgba(71, 43, 20, 0.08);
+  position: relative;
+}
+
+.author-signature::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 0;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+.author-signature-title {
+  margin: 0;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+.author-signature-head {
+  display: grid;
+  gap: 4px;
+}
+
+.author-signature-name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.author-signature-bio {
+  margin: 0;
+  color: #4a4136;
+}
+
+.author-signature-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+}
+
+.date-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.date-badge::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.published-date::before {
+  background: #2f8b57;
+}
+
+.updated-date::before {
+  background: #c55d2d;
+}
+
+.author-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.founder-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.founder-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.founder-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
 .search-form,
 .admin-form {
   display: grid;
@@ -251,6 +373,11 @@ button {
   .nav {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .author-hero,
+  .author-signature {
+    grid-template-columns: 1fr;
   }
 
   .hero,

@@ -88,9 +88,27 @@ export async function getTagArticles(request: Request, response: Response) {
 
 export async function getAuthor(request: Request, response: Response) {
   const slug = getParamValue(request.params.slug);
-  const result = await query("SELECT id, name, slug, email, bio, avatar_url, is_admin, created_at FROM users WHERE slug = $1", [
-    slug
-  ]);
+  const result = await query(
+    `SELECT
+      u.id,
+      u.name,
+      u.slug,
+      u.email,
+      u.bio,
+      u.avatar_url,
+      u.linkedin_url,
+      u.github_url,
+      u.is_admin,
+      u.created_at,
+      (
+        SELECT COUNT(*)
+        FROM articles a
+        WHERE a.author_id = u.id AND a.status = 'published'
+      )::int AS articles_count
+    FROM users u
+    WHERE u.slug = $1`,
+    [slug]
+  );
   if (!result.rows[0]) {
     return response.status(404).json({ message: "Author not found" });
   }

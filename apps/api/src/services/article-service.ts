@@ -24,6 +24,7 @@ type RawArticleRow = {
   author_name: string | null;
   author_slug: string | null;
   author_avatar_url: string | null;
+  author_bio: string | null;
   category_id: number | null;
   category_name: string | null;
   category_slug: string | null;
@@ -50,6 +51,7 @@ function normalizeArticle(row: RawArticleRow): ArticlePreview {
           name: row.author_name ?? "",
           slug: row.author_slug ?? "",
           avatar_url: row.author_avatar_url,
+          bio: row.author_bio,
         }
       : null,
     category: row.category_id
@@ -82,6 +84,7 @@ const articleSelect = `
     u.name AS author_name,
     u.slug AS author_slug,
     u.avatar_url AS author_avatar_url,
+    u.bio AS author_bio,
     c.id AS category_id,
     c.name AS category_name,
     c.slug AS category_slug,

@@ -38,6 +38,7 @@ export default async function ArticlePage({
     headline: article.title,
     description: article.excerpt,
     datePublished: article.published_at,
+    dateModified: article.updated_at,
     author: article.author?.name,
     image: article.cover_url,
   };
@@ -57,12 +58,37 @@ export default async function ArticlePage({
         </div>
         <h1>{article.title}</h1>
         <p>{article.excerpt}</p>
-        <p>
-          Автор:{" "}
-          <Link href={`/authors/${article.author?.slug}`}>
-            {article.author?.name}
-          </Link>
-        </p>
+        {article.author ? (
+          <section className="author-signature">
+            {article.author.avatar_url ? (
+              <img
+                src={article.author.avatar_url}
+                alt={`Фото автора ${article.author.name}`}
+                className="author-avatar"
+              />
+            ) : null}
+            <div className="stack">
+              <div className="author-signature-head">
+                <p className="author-signature-title">Автор матеріалу</p>
+                <p className="author-signature-name">
+                  <Link href={`/authors/${article.author.slug}`}>{article.author.name}</Link>
+                </p>
+              </div>
+              {article.author.bio ? <p className="author-signature-bio">{article.author.bio}</p> : null}
+              <div className="author-signature-dates">
+                <span className="date-badge published-date">
+                  Опубліковано:{" "}
+                  {article.published_at
+                    ? new Date(article.published_at).toLocaleDateString("uk-UA")
+                    : "Без дати"}
+                </span>
+                <span className="date-badge updated-date">
+                  Оновлено: {new Date(article.updated_at).toLocaleDateString("uk-UA")}
+                </span>
+              </div>
+            </div>
+          </section>
+        ) : null}
         <div className="tag-list">
           {article.tags.map((tag: Tag) => (
             <Link key={tag.id} href={`/tags/${tag.slug}`} className="tag">

@@ -158,7 +158,26 @@ export async function deleteArticle(request: Request, response: Response) {
 }
 
 export async function listAuthors(_request: Request, response: Response) {
-  const result = await query("SELECT id, name, slug, email, bio, avatar_url, is_admin, created_at FROM users ORDER BY created_at DESC");
+  const result = await query(
+    `SELECT
+      u.id,
+      u.name,
+      u.slug,
+      u.email,
+      u.bio,
+      u.avatar_url,
+      u.linkedin_url,
+      u.github_url,
+      u.is_admin,
+      u.created_at,
+      (
+        SELECT COUNT(*)
+        FROM articles a
+        WHERE a.author_id = u.id AND a.status = 'published'
+      )::int AS articles_count
+    FROM users u
+    ORDER BY u.created_at DESC`
+  );
   response.json(result.rows);
 }
 

@@ -1,9 +1,28 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { ArticleViewTracker } from "../../../components/article-view-tracker";
 import { ArticleCard } from "../../../components/article-card";
 import { getArticle, getRelatedArticles } from "../../../lib/api";
 import { buildMetadata } from "../../../lib/seo";
 import { ArticlePreview, Tag } from "../../../types/types.front";
+
+function renderArticleContent(content: string) {
+  return content
+    .split(/\r?\n\s*\r?\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block, index): ReactNode => {
+      if (block.startsWith("## ")) {
+        return <h2 key={index}>{block.slice(3).trim()}</h2>;
+      }
+
+      if (block.startsWith("### ")) {
+        return <h3 key={index}>{block.slice(4).trim()}</h3>;
+      }
+
+      return <p key={index}>{block}</p>;
+    });
+}
 
 export async function generateMetadata({
   params,
@@ -31,14 +50,24 @@ export default async function ArticlePage({
     getArticle(slug),
     getRelatedArticles(slug),
   ]);
+  const authorName =
+    article.slug === "seo-optimization-guide"
+      ? "Diana Hutsuliak"
+      : article.author?.name;
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title,
-    description: article.excerpt,
-    datePublished: article.published_at,
-    author: article.author?.name,
+    description: article.meta_description ?? article.excerpt ?? article.title,
+    datePublished: article.published_at ?? undefined,
+    dateModified: article.updated_at,
+    author: authorName
+      ? {
+          "@type": "Person",
+          name: authorName,
+        }
+      : undefined,
     image: article.cover_url,
   };
 
@@ -70,7 +99,7 @@ export default async function ArticlePage({
             </Link>
           ))}
         </div>
-        <div className="article-content">{article.content}</div>
+        <div className="article-content">{renderArticleContent(article.content)}</div>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

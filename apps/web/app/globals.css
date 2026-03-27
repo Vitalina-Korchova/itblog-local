@@ -165,10 +165,49 @@ button {
   gap: 18px;
 }
 
+.topic-outline {
+  margin-bottom: 24px;
+}
+
+.topic-section h2 {
+  margin: 0 0 16px;
+}
+
+.topic-list {
+  display: grid;
+  gap: 12px;
+}
+
+.topic-item h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+.topic-item a {
+  color: var(--accent-dark);
+}
+
 .article-content {
   font-size: 1.05rem;
   line-height: 1.8;
   color: #2e2923;
+}
+
+.article-content h2,
+.article-content h3 {
+  line-height: 1.2;
+  margin: 1.75rem 0 0.75rem;
+}
+
+.article-content h2:first-child,
+.article-content h3:first-child,
+.article-content p:first-child {
+  margin-top: 0;
+}
+
+.article-content p {
+  margin: 0 0 1rem;
 }
 
 .search-form,

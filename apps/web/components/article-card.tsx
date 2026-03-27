@@ -1,24 +1,34 @@
 import Link from "next/link";
 import { ArticlePreview, Tag } from "../types/types.front";
 
-export function ArticleCard({ article }: { article: ArticlePreview }) {
+type ArticleCardProps = {
+  article: ArticlePreview;
+  headingLevel?: 2 | 3;
+};
+
+export function ArticleCard({
+  article,
+  headingLevel = 2,
+}: ArticleCardProps) {
+  const HeadingTag = `h${headingLevel}` as const;
+
   return (
     <article className="card">
       <div className="card-meta">
-        <span>{article.category?.name ?? "Без категорії"}</span>
+        <span>{article.category?.name ?? "Р‘РµР· РєР°С‚РµРіРѕСЂС–С—"}</span>
         <span>
           {article.published_at
             ? new Date(article.published_at).toLocaleDateString("uk-UA")
-            : "Чернетка"}
+            : "Р§РµСЂРЅРµС‚РєР°"}
         </span>
       </div>
-      <h2>
+      <HeadingTag>
         <Link href={`/articles/${article.slug}`}>{article.title}</Link>
-      </h2>
+      </HeadingTag>
       <p>{article.excerpt}</p>
       <div className="card-footer">
-        <span>{article.author?.name ?? "Невідомий автор"}</span>
-        <span>{article.views} переглядів</span>
+        <span>{article.author?.name ?? "РќРµРІС–РґРѕРјРёР№ Р°РІС‚РѕСЂ"}</span>
+        <span>{article.views} РїРµСЂРµРіР»СЏРґС–РІ</span>
       </div>
       <div className="tag-list">
         {article.tags.map((tag: Tag) => (

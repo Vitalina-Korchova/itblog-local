@@ -8,10 +8,10 @@ export function SiteHeader() {
       </Link>
       <nav className="nav">
         <Link href="/">Головна</Link>
+        <Link href="/about">Про нас</Link>
         <Link href="/search">Пошук</Link>
         <Link href="/admin">Адмінка</Link>
       </nav>
     </header>
   );
 }
-

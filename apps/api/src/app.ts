@@ -7,9 +7,22 @@ import { errorHandler } from "./middleware/error-handler.js";
 
 export const app = express();
 
+const allowedOrigins = new Set([
+  "https://mynewsitseoblog.pp.ua",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000"
+]);
+
 app.use(
   cors({
-    origin: "https://itblogweb-production.up.railway.app",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.has(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );

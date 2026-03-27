@@ -7,6 +7,9 @@ export interface User {
   email: string;
   bio: string | null;
   avatar_url: string | null;
+  linkedin_url: string | null;
+  github_url: string | null;
+  articles_count?: number;
   is_admin: boolean;
   created_at: string;
 }
@@ -39,7 +42,7 @@ export interface ArticlePreview {
   published_at: string | null;
   created_at: string;
   updated_at: string;
-  author: Pick<User, "id" | "name" | "slug" | "avatar_url"> | null;
+  author: Pick<User, "id" | "name" | "slug" | "avatar_url" | "bio"> | null;
   category: Pick<Category, "id" | "name" | "slug"> | null;
   tags: Tag[];
 }

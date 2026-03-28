@@ -12,14 +12,16 @@ export function buildMetadata({
   title,
   description,
   path,
-  image
+  image,
+  canonicalUrl,
 }: {
   title: string;
   description: string;
   path: string;
   image?: string | null;
+  canonicalUrl?: string;
 }): Metadata {
-  const url = joinUrl(siteUrl, path);
+  const url = canonicalUrl ?? joinUrl(siteUrl, path);
 
   return {
     title,

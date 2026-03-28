@@ -9,6 +9,7 @@ import {
 } from "../../../lib/article-page-overrides";
 import { buildMetadata } from "../../../lib/seo";
 import { ArticlePreview, Tag } from "../../../types/types.front";
+import { formatDateForSchema } from "../../../lib/utils";
 
 function renderArticleContent(content: string) {
   return content
@@ -69,9 +70,12 @@ export default async function ArticlePage({
     "@type": "Article",
     headline: override?.schema?.headline ?? article.title,
     description: article.meta_description ?? article.excerpt ?? article.title,
-    datePublished:
-      override?.schema?.datePublished ?? article.published_at ?? undefined,
-    dateModified: override?.schema?.dateModified ?? article.updated_at,
+    datePublished: formatDateForSchema(
+      override?.schema?.datePublished ?? article.published_at
+    ),
+    dateModified: formatDateForSchema(
+      override?.schema?.dateModified ?? article.updated_at
+    ),
     author: authorName
       ? {
           "@type": "Person",

@@ -18,11 +18,23 @@ function renderArticleContent(content: string) {
     .filter(Boolean)
     .map((block, index): ReactNode => {
       if (block.startsWith("## ")) {
-        return <h2 key={index}>{block.slice(3).trim()}</h2>;
+        const [heading, ...bodyLines] = block.split(/\r?\n/);
+        const body = bodyLines.join(" ").trim();
+
+        return [
+          <h2 key={`h2-${index}`}>{heading.slice(3).trim()}</h2>,
+          body ? <p key={`h2-body-${index}`}>{body}</p> : null,
+        ];
       }
 
       if (block.startsWith("### ")) {
-        return <h3 key={index}>{block.slice(4).trim()}</h3>;
+        const [heading, ...bodyLines] = block.split(/\r?\n/);
+        const body = bodyLines.join(" ").trim();
+
+        return [
+          <h3 key={`h3-${index}`}>{heading.slice(4).trim()}</h3>,
+          body ? <p key={`h3-body-${index}`}>{body}</p> : null,
+        ];
       }
 
       return <p key={index}>{block}</p>;

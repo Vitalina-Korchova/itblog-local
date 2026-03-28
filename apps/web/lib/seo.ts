@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
 import { siteUrl } from "./env";
 
+function joinUrl(base: string, path: string) {
+  const normalizedBase = base.replace(/\/+$/, "");
+  const normalizedPath = path.replace(/^\/+/, "");
+
+  return normalizedPath ? `${normalizedBase}/${normalizedPath}` : `${normalizedBase}/`;
+}
+
 export function buildMetadata({
   title,
   description,
   path,
-  image
+  image,
+  canonicalUrl,
 }: {
   title: string;
   description: string;
   path: string;
   image?: string | null;
+  canonicalUrl?: string;
 }): Metadata {
-  const url = `${siteUrl}${path}`;
+  const url = canonicalUrl ?? joinUrl(siteUrl, path);
 
   return {
     title,

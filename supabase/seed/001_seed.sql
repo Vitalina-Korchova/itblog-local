@@ -164,6 +164,65 @@ insert into articles (
   published_at
 )
 select
+  'SEO Optimization Guide for Beginners',
+  'seo-optimization-guide',
+  'Learn SEO optimization step by step and improve your website ranking with practical tips, tools, and beginner-friendly strategies.',
+  'SEO optimization helps search engines understand your content and helps people find your website faster. This guide explains the basics you need to build stronger rankings without getting lost in jargon.
+
+## What is SEO Optimization
+
+SEO optimization is the process of improving your pages so they appear more clearly in search results. It combines content quality, search intent, page structure, and technical performance.
+
+## On-Page SEO Basics
+
+Start with a clear title, one strong H1, descriptive meta tags, and content that answers the main query directly. Use related keywords naturally and keep internal links helpful for readers.
+
+## Technical SEO Tips
+
+Make sure your pages load quickly, work well on mobile, and include canonical URLs, structured data, and clean site architecture. Search engines reward pages that are easy to crawl and easy to trust.
+
+## Common SEO Mistakes
+
+Avoid keyword stuffing, duplicate titles, missing meta descriptions, and weak page hierarchy. Small technical issues can limit strong content if they are left unresolved.',
+  'https://images.unsplash.com/photo-1460925895917-afdab827c52f',
+  u.id,
+  c.id,
+  'published',
+  0,
+  'SEO Optimization Guide: Improve Your Website Ranking Fast',
+  'Learn SEO optimization step by step and improve your website ranking. Practical tips, tools, and strategies for beginners. Start optimizing today!',
+  timestamp '2026-03-20 00:00:00'
+from users u, categories c
+where u.slug = 'diana-developer' and c.slug = 'tooling'
+on conflict (slug) do update
+set
+  title = excluded.title,
+  excerpt = excluded.excerpt,
+  content = excluded.content,
+  cover_url = excluded.cover_url,
+  author_id = excluded.author_id,
+  category_id = excluded.category_id,
+  status = excluded.status,
+  views = excluded.views,
+  meta_title = excluded.meta_title,
+  meta_description = excluded.meta_description,
+  published_at = excluded.published_at;
+
+insert into articles (
+  title,
+  slug,
+  excerpt,
+  content,
+  cover_url,
+  author_id,
+  category_id,
+  status,
+  views,
+  meta_title,
+  meta_description,
+  published_at
+)
+select
   'Підключення PostgreSQL у Supabase для командного блогу',
   'postgresql-supabase-it-blog',
   'Що потрібно налаштувати для стабільної роботи бази даних у студентському проєкті.',
@@ -554,6 +613,7 @@ where article_id in (
   select id from articles where slug in (
     'ssr-blog-nextjs-supabase',
     'postgresql-supabase-it-blog',
+    'seo-optimization-guide',
     'content-marketing-it-start',
     'seo-clusters-it-blog',
     'email-marketing-saas-it',
@@ -634,4 +694,12 @@ from articles a
 cross join tags t
 where a.slug = 'postgresql-supabase-it-blog'
   and t.slug in ('supabase', 'postgresql', 'nodejs')
+on conflict do nothing;
+
+insert into article_tags (article_id, tag_id)
+select a.id, t.id
+from articles a
+cross join tags t
+where a.slug = 'seo-optimization-guide'
+  and t.slug in ('seo')
 on conflict do nothing;

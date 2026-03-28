@@ -1,9 +1,32 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { ArticleViewTracker } from "../../../components/article-view-tracker";
 import { ArticleCard } from "../../../components/article-card";
 import { getArticle, getRelatedArticles } from "../../../lib/api";
+import {
+  applyArticlePageOverride,
+  getArticlePageOverride,
+} from "../../../lib/article-page-overrides";
 import { buildMetadata } from "../../../lib/seo";
 import { ArticlePreview, Tag } from "../../../types/types.front";
+
+function renderArticleContent(content: string) {
+  return content
+    .split(/\r?\n\s*\r?\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block, index): ReactNode => {
+      if (block.startsWith("## ")) {
+        return <h2 key={index}>{block.slice(3).trim()}</h2>;
+      }
+
+      if (block.startsWith("### ")) {
+        return <h3 key={index}>{block.slice(4).trim()}</h3>;
+      }
+
+      return <p key={index}>{block}</p>;
+    });
+}
 
 export async function generateMetadata({
   params,
@@ -11,13 +34,15 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = await getArticle(slug);
+  const article = applyArticlePageOverride(await getArticle(slug));
+  const override = getArticlePageOverride(article.slug);
 
   return buildMetadata({
     title: article.meta_title ?? article.title,
     description: article.meta_description ?? article.excerpt ?? article.title,
     path: `/articles/${article.slug}`,
     image: article.cover_url,
+    canonicalUrl: override?.canonicalUrl,
   });
 }
 
@@ -27,19 +52,31 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [article, related] = await Promise.all([
+  const [rawArticle, related] = await Promise.all([
     getArticle(slug),
     getRelatedArticles(slug),
   ]);
+  const article = applyArticlePageOverride(rawArticle);
+  const override = getArticlePageOverride(article.slug);
+  const authorName =
+    override?.schema?.authorName ??
+    (article.slug === "seo-optimization-guide"
+      ? "Diana Hutsuliak"
+      : article.author?.name);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: article.title,
-    description: article.excerpt,
-    datePublished: article.published_at,
-    dateModified: article.updated_at,
-    author: article.author?.name,
+    headline: override?.schema?.headline ?? article.title,
+    description: article.meta_description ?? article.excerpt ?? article.title,
+    datePublished: override?.schema?.datePublished ?? article.published_at ?? undefined,
+    dateModified: override?.schema?.dateModified ?? article.updated_at,
+    author: authorName
+      ? {
+          "@type": "Person",
+          name: authorName,
+        }
+      : undefined,
     image: article.cover_url,
   };
 
@@ -96,7 +133,7 @@ export default async function ArticlePage({
             </Link>
           ))}
         </div>
-        <div className="article-content">{article.content}</div>
+        <div className="article-content">{renderArticleContent(article.content)}</div>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

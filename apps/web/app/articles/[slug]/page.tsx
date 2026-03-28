@@ -69,15 +69,27 @@ export default async function ArticlePage({
     "@type": "Article",
     headline: override?.schema?.headline ?? article.title,
     description: article.meta_description ?? article.excerpt ?? article.title,
-    datePublished: override?.schema?.datePublished ?? article.published_at ?? undefined,
+    datePublished:
+      override?.schema?.datePublished ?? article.published_at ?? undefined,
     dateModified: override?.schema?.dateModified ?? article.updated_at,
     author: authorName
       ? {
           "@type": "Person",
           name: authorName,
+          ...(article.author?.slug && {
+            url: `${process.env.NEXT_PUBLIC_SITE_URL}/authors/${article.author.slug}`,
+          }),
         }
       : undefined,
-    image: article.cover_url,
+    publisher: {
+      "@type": "Organization",
+      name: "SEO-оптимізований блог про технології з SSR.",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/articles/${article.slug}`,
+    },
+    ...(article.cover_url && { image: article.cover_url }),
   };
 
   return (
@@ -108,10 +120,14 @@ export default async function ArticlePage({
               <div className="author-signature-head">
                 <p className="author-signature-title">Автор матеріалу</p>
                 <p className="author-signature-name">
-                  <Link href={`/authors/${article.author.slug}`}>{article.author.name}</Link>
+                  <Link href={`/authors/${article.author.slug}`}>
+                    {article.author.name}
+                  </Link>
                 </p>
               </div>
-              {article.author.bio ? <p className="author-signature-bio">{article.author.bio}</p> : null}
+              {article.author.bio ? (
+                <p className="author-signature-bio">{article.author.bio}</p>
+              ) : null}
               <div className="author-signature-dates">
                 <span className="date-badge published-date">
                   Опубліковано:{" "}
@@ -120,7 +136,8 @@ export default async function ArticlePage({
                     : "Без дати"}
                 </span>
                 <span className="date-badge updated-date">
-                  Оновлено: {new Date(article.updated_at).toLocaleDateString("uk-UA")}
+                  Оновлено:{" "}
+                  {new Date(article.updated_at).toLocaleDateString("uk-UA")}
                 </span>
               </div>
             </div>
@@ -133,7 +150,9 @@ export default async function ArticlePage({
             </Link>
           ))}
         </div>
-        <div className="article-content">{renderArticleContent(article.content)}</div>
+        <div className="article-content">
+          {renderArticleContent(article.content)}
+        </div>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -56,7 +56,10 @@ const structuredSections: StructuredSection[] = [
   },
 ];
 
-function findArticleByTopic(articles: ArticlePreview[], topic: StructuredTopic) {
+function findArticleByTopic(
+  articles: ArticlePreview[],
+  topic: StructuredTopic
+) {
   return articles.find((article) => topic.matchSlugs?.includes(article.slug));
 }
 
@@ -64,7 +67,7 @@ export const revalidate = 120;
 export const metadata = buildMetadata({
   title: "IT Blog",
   description:
-    "РћСЃС‚Р°РЅРЅС– РЅРѕРІРёРЅРё Р·С– СЃРІС–С‚Сѓ frontend, backend, AI, DevOps С‚Р° РєС–Р±РµСЂР±РµР·РїРµРєРё.",
+    "Останні новини зі світу frontend, backend, AI, DevOps та кібербезпеки.",
   path: "/",
 });
 
@@ -90,10 +93,13 @@ export default async function HomePage({
   return (
     <>
       <section className="hero">
-        <p>РќРѕРІРёРЅРё, Р°РЅР°Р»С–С‚РёРєР° С‚Р° РїСЂР°РєС‚РёС‡РЅС– РјР°С‚РµСЂС–Р°Р»Рё РґР»СЏ СЃСѓС‡Р°СЃРЅРѕС— IT-РєРѕРјР°РЅРґРё.</p>
-        <h1>SEO-РѕРїС‚РёРјС–Р·РѕРІР°РЅРёР№ Р±Р»РѕРі РїСЂРѕ С‚РµС…РЅРѕР»РѕРіС–С— Р· SSR.</h1>
+        <p>Новини, аналітика та практичні матеріали для сучасної IT-команди.</p>
+        <h1>SEO-оптимізований блог про технології з SSR.</h1>
       </section>
-      <section className="topic-outline stack" aria-label="Структура контенту блогу">
+      <section
+        className="topic-outline stack"
+        aria-label="Структура контенту блогу"
+      >
         {structuredSections.map((section) => (
           <section key={section.title} className="card topic-section">
             <h2>{section.title}</h2>
@@ -105,7 +111,9 @@ export default async function HomePage({
                   <article key={topic.title} className="topic-item">
                     <h3>
                       {article ? (
-                        <Link href={`/articles/${article.slug}`}>{topic.title}</Link>
+                        <Link href={`/articles/${article.slug}`}>
+                          {topic.title}
+                        </Link>
                       ) : (
                         topic.title
                       )}

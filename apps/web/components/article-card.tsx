@@ -15,11 +15,11 @@ export function ArticleCard({
   return (
     <article className="card">
       <div className="card-meta">
-        <span>{article.category?.name ?? "Р‘РµР· РєР°С‚РµРіРѕСЂС–С—"}</span>
+        <span>{article.category?.name ?? "Без категорії"}</span>
         <span>
           {article.published_at
             ? new Date(article.published_at).toLocaleDateString("uk-UA")
-            : "Р§РµСЂРЅРµС‚РєР°"}
+            : "Чернетка"}
         </span>
       </div>
       <HeadingTag>
@@ -27,8 +27,8 @@ export function ArticleCard({
       </HeadingTag>
       <p>{article.excerpt}</p>
       <div className="card-footer">
-        <span>{article.author?.name ?? "РќРµРІС–РґРѕРјРёР№ Р°РІС‚РѕСЂ"}</span>
-        <span>{article.views} РїРµСЂРµРіР»СЏРґС–РІ</span>
+        <span>{article.author?.name ?? "Невідомий автор"}</span>
+        <span>{article.views} переглядів</span>
       </div>
       <div className="tag-list">
         {article.tags.map((tag: Tag) => (

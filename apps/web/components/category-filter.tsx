@@ -1,32 +1,31 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Category } from "../types/types.front";
 
 export function CategoryFilter({ categories }: { categories: Category[] }) {
-  const router = useRouter();
   const params = useSearchParams();
+  const currentCategory = params.get("category");
 
   return (
     <div className="filter-row">
-      <button
-        className={!params.get("category") ? "active-chip" : "chip"}
-        onClick={() => router.push("/")}
-        type="button"
+      <Link
+        href="/"
+        className={!currentCategory ? "active-chip" : "chip"}
       >
         Всі
-      </button>
+      </Link>
       {categories.map((category) => (
-        <button
+        <Link
           key={category.id}
+          href={`/?category=${category.slug}`}
           className={
-            params.get("category") === category.slug ? "active-chip" : "chip"
+            currentCategory === category.slug ? "active-chip" : "chip"
           }
-          onClick={() => router.push(`/?category=${category.slug}`)}
-          type="button"
         >
           {category.name}
-        </button>
+        </Link>
       ))}
     </div>
   );

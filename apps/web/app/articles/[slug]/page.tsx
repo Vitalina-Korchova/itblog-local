@@ -9,6 +9,7 @@ import {
 } from "../../../lib/article-page-overrides";
 import { buildMetadata } from "../../../lib/seo";
 import { ArticlePreview, Tag } from "../../../types/types.front";
+import { Breadcrumbs } from "../../../components/breadcrumbs";
 import { formatDateForSchema } from "../../../lib/utils";
 
 function renderArticleContent(content: string) {
@@ -110,6 +111,7 @@ export default async function ArticlePage({
 
   return (
     <div className="stack">
+      <Breadcrumbs category={article.category} articleTitle={article.title} />
       <article className="card">
         <ArticleViewTracker articleId={article.id} />
         <div className="article-meta">
